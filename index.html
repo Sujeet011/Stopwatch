@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stopwatch</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+  }
+  #time-container {
+    background-color: #333;
+    color: white;
+    padding: 20px;
+    border-radius: 150px;
+    margin-bottom: 20px;
+    margin-left: 39%;
+    width: 20%;
+  }
+  #time {
+    font-size: 2em;
+    margin: 0;
+  }
+  button {
+    font-size: 1em;
+    padding: 10px 20px;
+    margin: 0 5px;
+    cursor: pointer;
+    background-color: rgb(63, 254, 222);
+    border: 0px;
+    border-radius: 20px;
+  }
+  h1 {
+color: red;
+text-decoration:underline;
+  }
+</style>
+</head>
+<body>
+
+<div id="time-container">
+    <h1>Stopwatch</h1>
+  <div id="time">00:00:00.000 </div><p style="color: red;">Sec</p>
+</div>
+<button onclick="StartStop()">Start / Stop</button>
+<button onclick="reset()">Reset</button>
+
+<script>
+  let timer;
+  let startTime;
+  let elapsedTime = 0;
+  let running = false;
+
+  function StartStop() {
+    if (running) {
+      stop();
+    } else {
+      start();
+    }
+  }
+
+  function start() {
+    if (!running) {
+      if (startTime === undefined) {
+        startTime = Date.now();
+      } else {
+        startTime = Date.now() - elapsedTime;
+      }
+      running = true;
+      timer = setInterval(updateTime); 
+    }
+  }
+
+  function stop() {
+    if (running) {
+      running = false;
+      clearInterval(timer);
+      elapsedTime = Date.now() - startTime;
+    }
+  }
+
+  function reset() {
+    running = false;
+    clearInterval(timer);
+    startTime = undefined;
+    elapsedTime = 0;
+    updateTime();
+  }
+
+  function updateTime() {
+    const currentTime = new Date(Date.now() - startTime || 0);
+    const hours = currentTime.getUTCHours();
+    const minutes = currentTime.getUTCMinutes();
+    const seconds = currentTime.getUTCSeconds();
+    const milliseconds = currentTime.getUTCMilliseconds();
+    const formattedTime = `${hours ? hours.toString().padStart(2, '0') + ':' : ''}${hours || minutes ? minutes.toString().padStart(2, '0') + ':' : ''}${seconds.toString().padStart(2, '0')}.${milliseconds.toString().padStart(2, '0')}`;
+    document.getElementById('time').textContent = formattedTime;
+  }
+</script>
+
+</body>
+</html>
